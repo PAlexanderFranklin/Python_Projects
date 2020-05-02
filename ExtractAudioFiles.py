@@ -15,8 +15,8 @@ for project in source.iterdir():
         count = 0
         try:
             for file in (project / 'AUDIO').iterdir():
-                count += 1
                 if file.name[-3:] == 'WAV':
+                    count += 1
                     if count > 1:
                         newName = project.name + '_' + str(count) + '.WAV'
                     else:
