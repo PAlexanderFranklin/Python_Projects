@@ -1,21 +1,17 @@
 import pyautogui
 import time
 
-# click locations: 1480, 250 => 1650, 390
-pyautogui.moveTo(1650, 390)
+clickList = [] # (x position of click, y position of click, time delay in seconds)
+clickList.append({'x': 1480, 'y': 250, 't': 0.2})
+clickList.append({'x': 1650, 'y': 390, 't': 0.2})
 
 try:
-    for i in range(0, 1000):
+    for i in clickList:
+        pyautogui.moveTo(i['x'], i['y'])
         position = pyautogui.position()
-        time.sleep(0.2)
+        time.sleep(i['t'])
         if pyautogui.position() != position:
             raise RuntimeError("Failsafe activated")
         pyautogui.click()
-        time.sleep(0.05)
-        pyautogui.moveTo(1480, 250)
-        time.sleep(0.2)
-        pyautogui.click()
-        time.sleep(0.05)
-        pyautogui.moveTo(1650, 390)
 except RuntimeError as message:
     print(message)
