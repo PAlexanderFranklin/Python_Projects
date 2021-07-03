@@ -48,3 +48,14 @@ if (len(genreTracks) > 100):
     print(genre + " is a popular genre.")
 else:
     print(genre + " is not very popular")
+
+
+cursor5 = db.cursor()
+cursor5.execute("""
+SELECT genres.Name, genres.GenreId, COUNT(TrackId)
+FROM genres
+    JOIN tracks ON genres.GenreId = tracks.GenreID
+GROUP BY genres.Name
+ORDER BY COUNT(TrackId) DESC;
+""")
+print("Tracks in each Genre: ", cursor5.fetchall(), '\n')
