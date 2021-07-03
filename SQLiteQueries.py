@@ -4,8 +4,7 @@ db = apsw.Connection("./SQLiteDB/chinook.db")
 cursor1 = db.cursor()
 cursor1.execute("""
 SELECT *
-FROM employees
-LIMIT 10;
+FROM employees;
 """)
 print(cursor1.fetchall(), '\n')
 
@@ -18,14 +17,34 @@ GROUP BY Composer
 ORDER BY SUM(Milliseconds) DESC
 LIMIT 10;
 """)
-print(cursor2.fetchall(), '\n')
+print("Composers with the longest total tracks: ", cursor2.fetchall(), '\n')
 
 cursor3 = db.cursor()
 cursor3.execute("""
-SELECT Name, MediaTypeId, Milliseconds
+SELECT Name, Milliseconds
 FROM tracks
 WHERE MediaTypeId != 3
 ORDER BY Milliseconds DESC
-LIMIT 10
+LIMIT 10;
 """)
-print(cursor3.fetchall(), '\n')
+print("Longest non-audio book tracks: ", cursor3.fetchall(), '\n')
+
+genre = input("Enter a genre: ")
+
+cursor4 = db.cursor()
+cursor4.execute("""
+SELECT Name, Composer
+FROM tracks
+WHERE GenreId = (
+    SELECT GenreId
+    FROM genres
+    WHERE Name = (?)
+);
+""", (genre, ))
+genreTracks = cursor4.fetchall()
+print("Tracks in the " + genre + " genre:", genreTracks, '\n')
+
+if (len(genreTracks) > 100):
+    print(genre + " is a popular genre.")
+else:
+    print(genre + " is not very popular")
