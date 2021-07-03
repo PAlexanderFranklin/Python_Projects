@@ -10,11 +10,11 @@ print(cursor1.fetchall(), '\n')
 
 cursor2 = db.cursor()
 cursor2.execute("""
-SELECT Composer, SUM(Milliseconds)
+SELECT Composer, SUM(Milliseconds) AS length
 FROM tracks
 WHERE MediaTypeId != 3
 GROUP BY Composer
-ORDER BY SUM(Milliseconds) DESC
+ORDER BY length DESC
 LIMIT 10;
 """)
 print("Composers with the longest total tracks: ", cursor2.fetchall(), '\n')
@@ -52,10 +52,10 @@ else:
 
 cursor5 = db.cursor()
 cursor5.execute("""
-SELECT genres.Name, genres.GenreId, COUNT(TrackId)
+SELECT genres.Name, genres.GenreId, COUNT(TrackId) AS quantity
 FROM genres
     JOIN tracks ON genres.GenreId = tracks.GenreID
 GROUP BY genres.Name
-ORDER BY COUNT(TrackId) DESC;
+ORDER BY quantity DESC;
 """)
 print("Tracks in each Genre: ", cursor5.fetchall(), '\n')
