@@ -1,5 +1,5 @@
 from pathlib import Path
-from shutil import rmtree
+from shutil import rmtree, move
 
 # Configure source and destination
 source = Path.cwd() / "audioSource"
@@ -16,14 +16,14 @@ for project in source.iterdir():
             count = 0
             try:
                 for file in (project / "AUDIO").iterdir():
-                    if file.name[-3:] == "WAV":
+                    if file.name[-3:].upper() == "WAV":
                         count += 1
                         if count > 1:
                             newName = project.name + "_" + str(count) + ".wav"
                         else:
                             newName = project.name + ".wav"
-                        with (destination / newName).open(mode="xb") as fid:
-                            fid.write(file.read_bytes())
+                        newPath = destination / newName
+                        move(file, newPath)
             except:
                 print(project.name + " failed to copy")
             else:
